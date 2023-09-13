@@ -1,0 +1,97 @@
+---
+import { Button } from "@/components/shadcn/ui/button";
+import { Input } from "@/components/shadcn/ui/input";
+import SignInLayout from "@/layouts/SignInLayout.astro";
+---
+
+<SignInLayout>
+  <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+      <form class="space-y-6">
+        <div>
+          <label
+            for="email"
+            class="block text-sm font-medium leading-6 text-gray-900"
+          >
+            Email address
+          </label>
+          <div class="mt-2">
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+            />
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between">
+            <label
+              for="password"
+              class="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Password
+            </label>
+            <div class="text-sm">
+              <a
+                href="#"
+                class="font-semibold text-indigo-600 hover:text-indigo-500"
+              >
+                Forgot password?
+              </a>
+            </div>
+          </div>
+          <div class="mt-2">
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              required
+            />
+          </div>
+        </div>
+
+        <div>
+          <Button type="submit" className="w-full">Sign in</Button>
+        </div>
+      </form>
+
+      <p class="mt-10 text-center text-sm text-gray-500">
+        Not a member?
+        <a
+          href="#"
+          class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+        >
+          Sign up
+        </a>
+      </p>
+    </div>
+  </div>
+</SignInLayout>
+<script>
+  import { onUserChange, signIn } from "@/lib/services.client";
+
+  onUserChange((user) => {
+    if (user) {
+      window.location.href = "/";
+    }
+  });
+
+  const form = document.querySelector("form");
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries()) as {
+      email: string;
+      password: string;
+    };
+    if (!data.email || !data.password) {
+      return alert("Please fill in all fields");
+    }
+    signIn(data.email, data.password);
+  });
+</script>

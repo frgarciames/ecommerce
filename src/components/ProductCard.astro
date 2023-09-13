@@ -1,0 +1,76 @@
+---
+import { Badge } from "./shadcn/ui/badge";
+import { ProductAddToCart } from "./react/add-to-cart";
+import { cn } from "@/lib/utils";
+
+interface Props {
+  price: number;
+  discountedPrice?: number;
+  name: string;
+  slug: string;
+  image: string;
+  id: string;
+  rating?: number;
+  currency?: string;
+}
+
+const {
+  price,
+  discountedPrice,
+  name,
+  slug,
+  rating,
+  image,
+  id,
+  currency = "EUR",
+} = Astro.props;
+const percentage =
+  discountedPrice && Math.round((discountedPrice / price) * 100);
+---
+
+<article
+  class="group relative flex h-96 flex-col space-y-2 overflow-hidden transition-all"
+>
+  <a
+    href={`/products/${slug}`}
+    class="relative h-full w-full overflow-hidden rounded-5xl bg-slate-300"
+  >
+    <img
+      src={image || "/images/default-image.webp"}
+      alt={name}
+      class="h-full w-full rounded-xl object-cover transition-all group-hover:scale-110"
+      transition:name={`product_card_${slug}`}
+    />
+
+    <span
+      class="opacity-1 absolute bottom-0 w-full p-4 transition-opacity md:opacity-0 md:group-hover:opacity-100"
+    >
+      <ProductAddToCart
+        size="lg"
+        className="w-full shadow-md"
+        client:visible
+        id={id}
+      >
+        Add to cart
+      </ProductAddToCart>
+    </span>
+  </a>
+  <h2>{name}</h2>
+  <div class="flex items-center space-x-2">
+    <h1
+      class={cn({
+        "text-slate-400 line-through text-lg": !!discountedPrice,
+      })}
+    >
+      {`${price} ${currency}`}
+    </h1>
+    {
+      discountedPrice && (
+        <>
+          <h2>{`${discountedPrice} ${currency}`}</h2>
+          <Badge variant="destructive">{percentage}%</Badge>
+        </>
+      )
+    }
+  </div>
+</article>

@@ -1,0 +1,35 @@
+---
+import BaseHead from "@/components/BaseHead.astro";
+import Footer from "@/components/Footer.astro";
+import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
+import { cn } from "@/lib/utils";
+---
+
+<!doctype html>
+<html lang="en" transition:name="root" class="h-full !overflow-visible">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body class="flex h-full flex-col">
+    <header class={cn("sticky top-0 z-10 transition-all duration-500")}>
+      <div class="bg-white md:border-b-[1px] md:px-8 md:py-4 md:shadow">
+        <div
+          class="m-auto flex w-full max-w-6xl items-center justify-between space-x-4 p-4 md:p-0"
+          id="main-header"
+        >
+          <ul class="flex items-start space-x-3 md:space-x-0">
+            <li>
+              <a href="/">SHOP.CO</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
+    <div vaul-drawer-wrapper="" class="flex flex-1 flex-col !overflow-visible">
+      <main class="flex-1 bg-white">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+  </body>
+</html>

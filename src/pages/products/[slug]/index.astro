@@ -1,0 +1,21 @@
+---
+import MainLayout from "@/layouts/MainLayout.astro";
+import { getProductBySlug } from "@/lib/services.server";
+
+export const prerender = false;
+
+const product = await getProductBySlug(Astro.params.slug as string);
+---
+
+<MainLayout>
+  <div>
+    <p>{product.name}</p>
+    <img
+      src={product.images?.[0]?.file?.url}
+      alt={product.name}
+      transition:name={`product_card_${product.slug}`}
+    />
+    <a href="/">Back</a>
+    <h1>productv</h1>
+  </div>
+</MainLayout>

@@ -1,0 +1,35 @@
+---
+import BaseHead from "@/components/BaseHead.astro";
+import Footer from "@/components/Footer.astro";
+import { Header } from "@/components/react/header";
+import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
+import { getCollection } from "astro:content";
+
+const headerCollection = await getCollection("header");
+const items = headerCollection
+  .map((item) => item.data)
+  .sort((a, b) => a.position - b.position);
+const search = Astro.url.searchParams.get("search") || undefined;
+---
+
+<!doctype html>
+<html lang="en" transition:name="root" class="!overflow-visible">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <div vaul-drawer-wrapper="" class="!overflow-visible">
+      <Header
+        items={items}
+        search={search}
+        client:load
+        transition:persist
+        transition:name="navigation"
+      />
+      <main class="bg-white">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+  </body>
+</html>

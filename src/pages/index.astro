@@ -1,0 +1,29 @@
+---
+import ProductCard from "@/components/ProductCard.astro";
+import MainLayout from "@/layouts/MainLayout.astro";
+import { getProducts } from "@/lib/services.server";
+
+const search = Astro.url.searchParams.get("search");
+const products: any = await getProducts(search);
+---
+
+<MainLayout>
+  <div
+    class="m-auto grid w-full grid-cols-1 gap-4 p-4 md:grid-cols-2 md:gap-8 md:p-8 lg:grid-cols-3 xl:max-w-6xl xl:px-0"
+  >
+    {
+      products.results.map((product: any) => (
+        <ProductCard
+          id={product.id}
+          price={product.price}
+          name={product.name}
+          image={product.images?.[0]?.file?.url}
+          slug={product.slug}
+          discountedPrice={product.sale_price}
+          currency={product.currency}
+          transition:persist
+        />
+      ))
+    }
+  </div>
+</MainLayout>
