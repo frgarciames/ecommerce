@@ -7,8 +7,7 @@
 3. [Features](#features)
 4. [Installation](#installation)
 5. [Usage](#usage)
-6. [Contributing](#contributing)
-7. [License](#license)
+6. [License](#license)
 
 ## Introduction
 
@@ -25,12 +24,12 @@ This e-commerce project is a modern, fast, and scalable solution for online reta
 
 ## Features
 
-- User Authentication [x]
-- Product Search and Filters [x]
-- Shopping Cart and Checkout [x]
-- Payment Gateway Integration [wip]
-- Order Management [wip]
-- Inventory Management [wip]
+- [x] User Authentication
+- [x] Product Search and Filters
+- [x] Shopping Cart and Checkout
+- [ ] Payment Gateway Integration
+- [ ] Order Management
+- [ ] Inventory Management
 
 ## Installation
 
