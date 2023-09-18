@@ -14,8 +14,10 @@ export const InputSearch = ({ search }: SearchProps) => {
   const debouncedSearchValue = useDebounce(searchValue, 500);
 
   useEffect(() => {
-    formRef.current?.requestSubmit();
-  }, [debouncedSearchValue, searchValue]);
+    if (debouncedSearchValue) {
+      formRef.current?.requestSubmit();
+    }
+  }, [debouncedSearchValue]);
 
   return (
     <form

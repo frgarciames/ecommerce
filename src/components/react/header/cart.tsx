@@ -1,12 +1,10 @@
 import { ShoppingCart, X } from "lucide-react";
-import { useEffect, useState, forwardRef, useRef } from "react";
+import { useState, forwardRef, useRef } from "react";
 import type { CartItem, Cart as CartType } from "swell-js";
 import { Drawer } from "vaul";
 import { Button } from "../../shadcn/ui/button";
 import {
-  addProductToCart,
   changeProductQuantityInCart,
-  onCartUpdated,
   removeProductFromCart,
 } from "@/lib/services.client";
 import {
@@ -25,6 +23,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../shadcn/ui/select";
+import { observer } from "mobx-react-lite";
+import { store } from "@/lib/store";
 
 type CartTriggerProps = React.HTMLAttributes<HTMLButtonElement> & {
   totalItems: number;
@@ -56,44 +56,20 @@ const ItemCart = ({
   item: CartItem;
   currency?: string;
 }) => {
-  const itemRef = useRef<HTMLLIElement>(null);
-  const [optimisticItem, setOptimisticItem] = useState<CartItem>(item);
-
   const removeItem = () => {
     if (!item.id) return;
-    setOptimisticItem({ ...item, quantity: 0 });
     removeProductFromCart(item.id);
   };
 
   const changeQuantity = (quantity: string) => {
     if (!item.id) return;
-    const newQuantity = Number(quantity);
-    const newPriceTotal = (item.price || 0) * newQuantity;
-    setOptimisticItem({
-      ...item,
-      quantity: Number(quantity),
-      priceTotal: newPriceTotal,
-    });
     changeProductQuantityInCart(item.id, Number(quantity));
   };
 
   return (
     <li
-      ref={itemRef}
-      onAnimationEnd={(e) => {
-        if (optimisticItem.quantity === 0) {
-          setTimeout(() => {
-            itemRef.current?.classList.add("hidden");
-          }, 150);
-        }
-      }}
       className={cn(
         "flex py-6 first:pt-2 last:pb-2 [&:not(:last-child)]:border-b-[1px]",
-        {
-          "animate-fade-left animate-reverse animate-duration-150":
-            optimisticItem.quantity === 0,
-          hidden: optimisticItem.quantity === 0,
-        },
       )}
     >
       <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
@@ -111,14 +87,14 @@ const ItemCart = ({
               <a>{item.product?.name}</a>
             </h3>
             <p className="ml-4">
-              {optimisticItem?.priceTotal} {currency}
+              {item?.priceTotal} {currency}
             </p>
           </div>
           <p className="mt-1 text-sm text-gray-500">{item?.variant?.name}</p>
         </div>
         <div className="flex flex-1 items-end justify-between text-sm">
           <Select
-            value={String(optimisticItem?.quantity) || "0"}
+            value={String(item?.quantity) || "0"}
             onValueChange={changeQuantity}
           >
             <SelectTrigger className="w-16">
@@ -323,20 +299,16 @@ const CartDesktop = ({ cart }: CartProps) => {
   );
 };
 
-export const Cart = () => {
-  const [cart, setCart] = useState<CartType | null>(null);
-
-  useEffect(() => {
-    onCartUpdated(setCart);
-  }, []);
+export const Cart = observer(() => {
+  console.log(store.cart);
   return (
     <>
       <div className="md:hidden">
-        <CartMobile cart={cart} />
+        <CartMobile cart={store.cart} />
       </div>
       <div className="relative hidden md:block">
-        <CartDesktop cart={cart} />
+        <CartDesktop cart={store.cart} />
       </div>
     </>
   );
-};
+});

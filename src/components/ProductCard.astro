@@ -43,16 +43,9 @@ const percentage =
     />
 
     <span
-      class="opacity-1 absolute bottom-0 w-full p-4 transition-opacity md:opacity-0 md:group-hover:opacity-100"
+      class="opacity-1 absolute bottom-0 w-full p-4 transition-opacity md:flex md:flex-row-reverse md:opacity-0 md:group-hover:opacity-100"
     >
-      <ProductAddToCart
-        size="lg"
-        className="w-full shadow-md"
-        client:visible
-        id={id}
-      >
-        Add to cart
-      </ProductAddToCart>
+      <ProductAddToCart client:visible id={id}>Add to cart</ProductAddToCart>
     </span>
   </a>
   <h2>{name}</h2>

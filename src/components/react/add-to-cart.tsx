@@ -12,5 +12,12 @@ export const ProductAddToCart = ({
     e.stopPropagation();
     addProductToCart(id);
   };
-  return <Button {...props} onClick={handleClick} />;
+  return (
+    <Button
+      size="lg"
+      className="w-full shadow-md md:w-auto"
+      onClick={handleClick}
+      {...props}
+    />
+  );
 };

@@ -3,12 +3,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "src/*"
-      ]
+      "@/*": ["src/*"]
     },
     "strictNullChecks": true,
     "jsx": "react-jsx",
+    "useDefineForClassFields": true,
     "jsxImportSource": "react"
   }
 }

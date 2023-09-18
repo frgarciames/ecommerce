@@ -1,10 +1,11 @@
 ---
 import { Button } from "@/components/shadcn/ui/button";
 import { Input } from "@/components/shadcn/ui/input";
-import SignInLayout from "@/layouts/SignInLayout.astro";
+import { UserSignInObserver } from "@/components/react/observers/user-sign-in";
+import SkeletonLayout from "@/layouts/SkeletonLayout.astro";
 ---
 
-<SignInLayout>
+<SkeletonLayout>
   <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
       <form class="space-y-6">
@@ -70,15 +71,10 @@ import SignInLayout from "@/layouts/SignInLayout.astro";
       </p>
     </div>
   </div>
-</SignInLayout>
+  <UserSignInObserver client:only />
+</SkeletonLayout>
 <script>
-  import { onUserChange, signIn } from "@/lib/services.client";
-
-  onUserChange((user) => {
-    if (user) {
-      window.location.href = "/";
-    }
-  });
+  import { signIn } from "@/lib/services.client";
 
   const form = document.querySelector("form");
 

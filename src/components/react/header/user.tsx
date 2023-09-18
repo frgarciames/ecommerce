@@ -11,6 +11,8 @@ import { LogOut, UserCircle2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { Account } from "swell-js";
 import { signOut } from "@/lib/services.client";
+import { observer } from "mobx-react-lite";
+import { store } from "@/lib/store";
 
 const SignIn = () => {
   return (
@@ -29,10 +31,14 @@ const Profile = () => {
       <DropdownMenuContent>
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Profile</DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <a href="/profile">Profile</a>
+        </DropdownMenuItem>
         <DropdownMenuItem>Billing</DropdownMenuItem>
         <DropdownMenuItem>Team</DropdownMenuItem>
-        <DropdownMenuItem>Subscription</DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <a href="/orders">Orders</a>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="justify-between" onClick={signOut}>
           Log out
@@ -43,14 +49,8 @@ const Profile = () => {
   );
 };
 
-export const User = () => {
-  const [user, setUser] = useState<Account | null>(null);
-
-  useEffect(() => {
-    swellClient.onUserChange(setUser);
-  }, []);
-
-  if (!user) return <SignIn />;
+export const User = observer(() => {
+  if (!store.user) return <SignIn />;
 
   return <Profile />;
-};
+});

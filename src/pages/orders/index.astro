@@ -1,0 +1,15 @@
+---
+import SkeletonLayout from "@/layouts/SkeletonLayout.astro";
+import { OrdersProvider } from "@/components/react/orders";
+import { ProtectedPageObserver } from "@/components/react/observers/protected-page";
+
+const searchParams = Astro.url.searchParams;
+const limit = Number(searchParams.get("limit")) || 5;
+const page = Number(searchParams.get("page")) || 1;
+---
+
+<SkeletonLayout>
+  <ProtectedPageObserver client:only>
+    <OrdersProvider limit={limit} page={page} client:only />
+  </ProtectedPageObserver>
+</SkeletonLayout>

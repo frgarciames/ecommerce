@@ -1,8 +1,7 @@
-import type { Account, Cart } from "swell-js";
-import { swellClient } from "./swell/swell.client";
+import { store } from "./store";
 
 export const addProductToCart = (productId: string, quantity = 1) => {
-  return swellClient.updateCart({
+  return store.updateCart({
     operation: "addItem",
     args: [
       {
@@ -13,37 +12,33 @@ export const addProductToCart = (productId: string, quantity = 1) => {
   });
 };
 
-type OnCartUpdatedCb = (cart: Cart | null) => void;
-export const onCartUpdated = (cb: OnCartUpdatedCb) => {
-  swellClient.subscribeToCart(cb);
-};
-
 export const removeProductFromCart = (id: string) => {
-  return swellClient.updateCart({
+  return store.updateCart({
     operation: "removeItem",
     args: [id],
   });
 };
 
 export const changeProductQuantityInCart = (id: string, quantity: number) => {
-  return swellClient.updateCart({
+  return store.updateCart({
     operation: "updateItem",
     args: [id, { quantity }],
   });
 };
 
-export const onUserChange = (cb: (user: Account | null) => void) => {
-  swellClient.onUserChange(cb);
-};
-
-export const getUser = () => {
-  return swellClient.user;
-};
-
 export const signIn = (email: string, password: string) => {
-  return swellClient.signIn(email, password);
+  return store.signIn(email, password);
 };
 
 export const signOut = () => {
-  return swellClient.signOut();
+  return store.signOut();
+};
+
+export type GetOrdersOptions = {
+  page?: number;
+  limit?: number;
+};
+
+export const getOrders = (options?: GetOrdersOptions) => {
+  return store.getOrders(options);
 };
