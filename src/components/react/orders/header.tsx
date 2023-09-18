@@ -31,7 +31,7 @@ export const OrderHeader = ({ order }: OrderHeaderProps) => {
             <dd className="sm:mt-1">{order.subTotal}</dd>
           </div>
         </dl>
-        <Button className="mt-10 w-full md:mt-0 md:w-auto">
+        <Button className="mt-10 w-full sm:mt-0 sm:w-auto">
           <a>
             View Invoice
             <span className="sr-only">for order {order.number}</span>

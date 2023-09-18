@@ -74,7 +74,7 @@ import SkeletonLayout from "@/layouts/SkeletonLayout.astro";
   <UserSignInObserver client:only />
 </SkeletonLayout>
 <script>
-  import { signIn } from "@/lib/services.client";
+  import { store } from "@/lib/store";
 
   const form = document.querySelector("form");
 
@@ -88,6 +88,6 @@ import SkeletonLayout from "@/layouts/SkeletonLayout.astro";
     if (!data.email || !data.password) {
       return alert("Please fill in all fields");
     }
-    signIn(data.email, data.password);
+    store.signIn(data.email, data.password);
   });
 </script>

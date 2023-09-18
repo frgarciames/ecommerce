@@ -4,10 +4,6 @@ import type { CartItem, Cart as CartType } from "swell-js";
 import { Drawer } from "vaul";
 import { Button } from "../../shadcn/ui/button";
 import {
-  changeProductQuantityInCart,
-  removeProductFromCart,
-} from "@/lib/services.client";
-import {
   Sheet,
   SheetClose,
   SheetContent,
@@ -58,12 +54,12 @@ const ItemCart = ({
 }) => {
   const removeItem = () => {
     if (!item.id) return;
-    removeProductFromCart(item.id);
+    store.removeProductFromCart(item.id);
   };
 
   const changeQuantity = (quantity: string) => {
     if (!item.id) return;
-    changeProductQuantityInCart(item.id, Number(quantity));
+    store.changeProductQuantityInCart(item.id, Number(quantity));
   };
 
   return (

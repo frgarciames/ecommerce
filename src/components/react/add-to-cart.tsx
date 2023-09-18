@@ -1,5 +1,5 @@
 import { Button } from "../shadcn/ui/button";
-import { addProductToCart } from "@/lib/services.client";
+import { store } from "@/lib/store";
 
 export const ProductAddToCart = ({
   id,
@@ -10,7 +10,7 @@ export const ProductAddToCart = ({
   const handleClick = (e: any) => {
     e.preventDefault();
     e.stopPropagation();
-    addProductToCart(id);
+    store.addProductToCart(id);
   };
   return (
     <Button

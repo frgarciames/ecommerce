@@ -1,4 +1,3 @@
-import { swellClient } from "@/lib/swell/swell.client";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,9 +7,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/shadcn/ui/dropdown-menu";
 import { LogOut, UserCircle2 } from "lucide-react";
-import { useEffect, useState } from "react";
-import type { Account } from "swell-js";
-import { signOut } from "@/lib/services.client";
 import { observer } from "mobx-react-lite";
 import { store } from "@/lib/store";
 
@@ -40,7 +36,7 @@ const Profile = () => {
           <a href="/orders">Orders</a>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="justify-between" onClick={signOut}>
+        <DropdownMenuItem className="justify-between" onClick={store.signOut}>
           Log out
           <LogOut className="h-5 w-5" />
         </DropdownMenuItem>

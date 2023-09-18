@@ -1,0 +1,38 @@
+---
+import SkeletonLayout from "@/layouts/SkeletonLayout.astro";
+import { Input } from "@/components/shadcn/ui/input";
+import { Button } from "@/components/shadcn/ui/button";
+
+const key = Astro.url.searchParams.get("key");
+---
+
+<SkeletonLayout>
+  <form class="flex flex-col items-center justify-center">
+    <div class="mb-12 w-full">
+      <label for="password" class="block text-sm font-medium leading-6"
+        >New password</label
+      >
+      <div class="mt-2">
+        <Input type="password" name="password" className="w-full" />
+      </div>
+    </div>
+    <input type="hidden" name="key" value={key} />
+    <Button type="submit" className="w-full sm:w-auto">Reset password</Button>
+  </form>
+</SkeletonLayout>
+<script>
+  import { recoverPassword } from "@/lib/services.client";
+  const form = document.querySelector("form");
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const password = form?.querySelector(
+      "input[name=password]",
+    ) as HTMLInputElement;
+    const key = form?.querySelector("input[name=key]") as HTMLInputElement;
+
+    await recoverPassword({ reset_key: key.value, password: password.value });
+
+    window.location.href = "/sign-in";
+  });
+</script>

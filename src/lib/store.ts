@@ -1,6 +1,7 @@
 import Swell, { type Account, type Cart } from "swell-js";
 import { makeAutoObservable } from "mobx";
 import { swellClient } from "./swell/swell.client";
+import { signIn } from "./services.client";
 
 type SwellCart = (typeof Swell)["cart"];
 type SwellCartOperations = keyof SwellCart;
@@ -63,7 +64,7 @@ export class Store {
   private _user: Account | null | undefined;
 
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {}, { autoBind: true });
     swellClient.client.account.get().then((user) => {
       this.user = user;
     });
@@ -98,9 +99,31 @@ export class Store {
   }
 
   signIn(email: string, password: string) {
-    swellClient.client.account.login(email, password).then((user) => {
+    return swellClient.client.account.login(email, password).then((user) => {
       this.user = user;
+      return user;
     });
+  }
+
+  *changePassword({
+    email,
+    newPassword,
+    confirmNewPassword,
+    currentPassword,
+  }: {
+    newPassword: string;
+    confirmNewPassword: string;
+    currentPassword: string;
+    email: string;
+  }) {
+    if (newPassword !== confirmNewPassword) {
+      throw new Error("Passwords do not match");
+    }
+    const account: Account = yield signIn(email, currentPassword);
+    if (!account) {
+      throw new Error("Invalid password");
+    }
+    return this.updateUser({ password: newPassword });
   }
 
   signOut() {
@@ -109,12 +132,35 @@ export class Store {
     });
   }
 
-  getOrders(options?: { limit?: number; page?: number }) {
-    return swellClient.client.account.listOrders(options) as ReturnType<
-      typeof swellClient.client.account.listOrders & {
-        pageCount: number;
-      }
-    >;
+  updateUser(data: Partial<Account>) {
+    return swellClient.client.account.update(data).then((user) => {
+      this.user = user;
+    });
+  }
+  addProductToCart(productId: string, quantity = 1) {
+    return this.updateCart({
+      operation: "addItem",
+      args: [
+        {
+          productId,
+          quantity,
+        },
+      ],
+    });
+  }
+
+  removeProductFromCart(id: string) {
+    return this.updateCart({
+      operation: "removeItem",
+      args: [id],
+    });
+  }
+
+  changeProductQuantityInCart(id: string, quantity: number) {
+    return this.updateCart({
+      operation: "updateItem",
+      args: [id, { quantity }],
+    });
   }
 }
 

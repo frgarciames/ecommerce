@@ -1,8 +1,11 @@
 ---
 import { ProtectedPageObserver } from "@/components/react/observers/protected-page";
+import { Profile } from "@/components/react/profile";
 import SkeletonLayout from "@/layouts/SkeletonLayout.astro";
 ---
 
 <SkeletonLayout>
-  <ProtectedPageObserver client:only>profile</ProtectedPageObserver>
+  <ProtectedPageObserver client:only>
+    <Profile client:load />
+  </ProtectedPageObserver>
 </SkeletonLayout>
