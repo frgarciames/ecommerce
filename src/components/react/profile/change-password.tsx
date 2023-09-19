@@ -3,12 +3,13 @@ import { Input } from "@/components/shadcn/ui/input";
 import { useToast } from "@/components/shadcn/ui/use-toast";
 import { store } from "@/lib/store";
 import { useMutation } from "@tanstack/react-query";
+import { useRef } from "react";
 
 export const ChangePassword = () => {
+  const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
   const { isLoading, mutateAsync } = useMutation(
     ["change_password"],
-    // @ts-ignore
     store.changePassword,
     {
       onSuccess: () => {
@@ -16,6 +17,7 @@ export const ChangePassword = () => {
           title: "Success",
           description: "Password has been changed",
         });
+        formRef.current?.reset();
       },
       onError: (error: any) => {
         toast({
@@ -38,7 +40,6 @@ export const ChangePassword = () => {
       email: store.user?.email as string,
       ...data,
     });
-    e.currentTarget.reset();
   };
   return (
     <div className="grid grid-cols-1 gap-x-8 gap-y-10  py-16  md:grid-cols-3 ">
@@ -53,6 +54,7 @@ export const ChangePassword = () => {
         className="md:col-span-2"
         name="change-password"
         onSubmit={handleSubmit}
+        ref={formRef}
       >
         <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
           <div className="col-span-full">
@@ -108,7 +110,11 @@ export const ChangePassword = () => {
         </div>
 
         <div className="mt-8 flex">
-          <Button type="submit" className="w-full sm:w-auto">
+          <Button
+            type="submit"
+            className="w-full sm:w-auto"
+            disabled={isLoading}
+          >
             {isLoading ? "Changing..." : "Change"}
           </Button>
         </div>

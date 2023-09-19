@@ -105,7 +105,7 @@ export class Store {
     });
   }
 
-  *changePassword({
+  async changePassword({
     email,
     newPassword,
     confirmNewPassword,
@@ -119,7 +119,7 @@ export class Store {
     if (newPassword !== confirmNewPassword) {
       throw new Error("Passwords do not match");
     }
-    const account: Account = yield signIn(email, currentPassword);
+    const account = await signIn(email, currentPassword);
     if (!account) {
       throw new Error("Invalid password");
     }
